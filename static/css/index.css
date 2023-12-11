@@ -1,0 +1,47 @@
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#chess-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board1 {
+    width: 400px;
+}
+
+#buttons-container {
+    text-align: center;
+    margin-left: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#winned {
+    width: 400px;
+    font-size: 24px;
+}
+
+#winnerSpan {
+    color: green;
+}

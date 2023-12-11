@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chessboard Example</title>
+
+    <!-- Include chess.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+
+    <!-- Include chessboard.js -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">-->
+    <link rel="stylesheet" href="../static/css/chessboard-1.0.0.min.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="../static/js/chessboard-1.0.0.js"></script>
+
+    <!-- <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>-->
+    
+   
+    <!-- Favicon link -->
+    <link rel="icon" href="../static/img/favicon.ico" type="image/x-icon">
+
+   <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div style="text-align: center;">
+                <button id="startBtn">Start Position</button>
+                <button id="clearBtn">Clear Board</button>
+                <div id="board1" style="width: 400px"></div>
+                
+                <button id="randomToRandomBtn">Start Random to Random Game</button>
+                <br/>
+                <button id="playerToRandomBtn">Start Player to Random Game</button>
+                <br/>
+                <br/>
+                <button id="pauseGameBtn">Pause Game and predict winner</button>
+                <button id="resumeGameBtn">Resume Game</button>
+
+                <!-- Include the external JavaScript file -->
+                <script type="text/javascript" src="../static/js/setup.js"></script>
+    </div>
+
+    <div style="text-align: center; margin-left: 20px;">
+        <div id="winned" style="width: 400px; font-size: 18px;">
+            Most probable to win is: <strong id="winnerSpan"></strong>
+        </div>
+    </div>
+            
+</table>
+</body>
+</html>
