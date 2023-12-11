@@ -26,14 +26,15 @@ To use this application, follow these steps:
 ## Usage
 
 
-1. Start a game:
+Start a game:
 
-    Random to Random: Let the engine play against itself.
-    Player to Random: Play against the engine, making moves as a player while the engine responds with random moves.
-    Player to Player: Play against another human player, taking turns making moves.
-    At any point during the game, you have the option to pause and make a prediction about the eventual winner of the session.
+1. Random to Random: Let the engine play against itself.
+2. Player to Random: Play against the engine, making moves as a player while the engine responds with random moves.
+3. Player to Player: Play against another human player, taking turns making moves.
+    
+At any point during the game, you have the option to pause and make a prediction about the eventual winner of the session.
 
-    Continue playing and interacting with the application as desired.
+Continue playing and interacting with the application as desired.
 
 ## Contributors
 
