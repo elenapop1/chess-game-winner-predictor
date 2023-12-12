@@ -28,8 +28,8 @@ To use this application, follow these steps:
 
 Start a game:
 
-1. Random to Random: Let the engine play against itself.
-2. Player to Random: Play against the engine, making moves as a player while the engine responds with random moves.
+1. Random to Random: Who will win in this riveting game of Math.random() vs Math.random()?
+2. Player to Random: Play against Math.random() .
     
 At any point during the game, you have the option to pause and make a prediction about the eventual winner of the session.
 
