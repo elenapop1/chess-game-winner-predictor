@@ -8,7 +8,7 @@ The primary goal of this project is to leverage machine learning algorithms to a
 
 ## How it Works
 
-The application is built upon a dataset (`kaggle_chess_moves.csv`) obtained from Kaggle, which includes a comprehensive collection of chess games. A RNN model has been trained on this dataset to analyze the moves of games and make predictions about the eventual winner based on the current chess moves, and other relevant factors.
+The application is built upon a dataset [Chess Game Dataset (Lichess)](https://www.kaggle.com/datasets/datasnaek/chess) obtained from Kaggle, which includes a comprehensive collection of chess games. A RNN model has been trained on this dataset to analyze the moves of games and make predictions about the eventual winner based on the current chess moves, and other relevant factors.
 
 
 ## Installation
