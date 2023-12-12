@@ -30,7 +30,6 @@ Start a game:
 
 1. Random to Random: Let the engine play against itself.
 2. Player to Random: Play against the engine, making moves as a player while the engine responds with random moves.
-3. Player to Player: Play against another human player, taking turns making moves.
     
 At any point during the game, you have the option to pause and make a prediction about the eventual winner of the session.
 
