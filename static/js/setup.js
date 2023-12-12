@@ -1,33 +1,83 @@
 var board = null
-var game = new Chess()
+//var game = new Chess()
 var isGamePaused = false;
 var isGameInProgress = false; 
+var randomMoveAllowed = true;
+var playerToRandomMode = false;
 
 
-/*------------------startGame-----------------------------*/
-function startGame() {
-    console.log(isGameInProgress);
-    console.log(isGamePaused);
+/*------------------stopGame-----------------------------*/
+function stopGame() {
+    // If the game is in progress, stop the game and reset the board
     if (isGameInProgress || isGamePaused) {
-        // If the game is in progress, stop the game and restart the board
-        stopGame();
-        board.clear;
-    } else {
-        // If the game is not in progress, simply start the board
-        board.start;
+        // Stop the game and retrieve the moves
+        var moves = game.history();
+        console.log('Moves:', moves);
+        
+        // Reset the board
+        board.clear();
+        // Set another board
+        board = Chessboard('board1', config);
+
+        // Reset the Chess game instance
+        game.reset();
+
+        isGameInProgress = false;
+        isGamePaused = false;
+        randomMoveAllowed = false;
+
+        var winnerSpan = document.getElementById('winnerSpan');
+        winnerSpan.innerHTML = '';
+        
     }
 }
 
-/*------------------startGame-----------------------------*/
-function stopGame() {
-    // Add your code to stop the game here
-    // For example, pause timers, disable moves, etc.
-    // Ensure that the board is in a state where it can be restarted.
-    isGameInProgress = false;
-    isGamePaused = false
-    board.stop;
+/*------------------randomToRandom-----------------------------*/
+function randomToRandom() {
+    // If the game is in progress, stop the game and reset the board
+    if (isGameInProgress) {
+        stopGame();
+    }
 
+    // Start a new board
+    board.start();
+    // Set another board
+    board = Chessboard('board1', config);
+
+    // Start a new game with only random moves
+    game = new Chess();
+    isGameInProgress = true;
+    isGamePaused = false;
+    playerToRandomMode = false;
+
+    // Allow only random moves
+    randomMoveAllowed = true;
+
+    // Start making random moves automatically
+    rtr = true;
+    console.log('elo');
+    makeRandomMove();
 }
+
+/*------------------playerToRandom-----------------------------*/
+function playerToRandom() {
+    // If the game is in progress, stop the game and reset the board
+    if (isGameInProgress) {
+        stopGame();
+    }
+
+    // Start a new board
+    board = Chessboard('board1', config);
+    config.draggable = true;
+
+    // Start a new game where a user has to drag and drop, and then random moves
+    game = new Chess();
+    isGameInProgress = true;
+    isGamePaused = false;
+    playerToRandomMode = true;
+    randomMoveAllowed = true;
+}
+
 
 /*------------------onDragStart-----------------------------*/
 function onDragStart (source, piece, position, orientation) {
@@ -41,18 +91,20 @@ function onDragStart (source, piece, position, orientation) {
 
 /*------------------makeRandomMove-----------------------------*/
 function makeRandomMove () {
+    if (randomMoveAllowed) {
+            var possibleMoves = game.moves()
 
-    isGameInProgress = true;
-    var possibleMoves = game.moves()
-
-    // game over
-    if (game.game_over()) return
-    if(!isGamePaused || !isGameInProgress){
-        var randomIdx = Math.floor(Math.random() * possibleMoves.length)
-        game.move(possibleMoves[randomIdx])
-        board.position(game.fen())
-  
-        window.setTimeout(makeRandomMove, 500)
+            // game over
+            if (game.game_over()) return
+            if(!isGamePaused){
+                var randomIdx = Math.floor(Math.random() * possibleMoves.length)
+                game.move(possibleMoves[randomIdx])
+                board.position(game.fen())
+        
+                if (!playerToRandomMode){
+                    window.setTimeout(makeRandomMove, 500)
+                }
+            }
     }
 }
 
@@ -69,7 +121,7 @@ function onDrop (source, target) {
     if (move === null) return 'snapback'
 
     // make random legal move for black
-    window.setTimeout(makeRandomMove, 250)
+    window.setTimeout(makeRandomMove, 500)
 }
 
 /*------------------onSnapEnd-----------------------------------*/
@@ -78,18 +130,24 @@ function onSnapEnd () {
     // for castling, en passant, pawn promotion
     board.position(game.fen())
 }
-
 /*------------------pauseGame-----------------------------------*/
 function pauseGame() {
     var winnerSpan = document.getElementById('winnerSpan');
     winnerSpan.innerHTML = '';
+
+    config.draggable = false;
 
     isGamePaused = true;
     var moves = game.history();
     console.log('Moves:', moves);
     sendMovesToBackend(moves)
 }
-
+/*------------------resumeGame-----------------------------------*/
+// Function to resume the game
+function resumeGame() {
+    isGamePaused = false;
+    config.draggable = true;
+}
 /*------------------sendMovesToBackend-----------------------------------*/
 function sendMovesToBackend(moves) {
 
@@ -109,44 +167,6 @@ function sendMovesToBackend(moves) {
     });
 
 }
-/*------------------resumeGame-----------------------------------*/
-// Function to resume the game
-function resumeGame() {
-    isGamePaused = false;
-}
-/*------------------makeBestMove-----------------------------------*/
-function makeBestMove() {
-    // Add your logic to generate the best move
-    //var bestMove = getBestMove(game);
-    var scnMove = "e2e4";
-    var moveObject = {
-        from: scnMove.substring(0, 2),
-        to: scnMove.substring(2, 4),
-        promotion: 'q', // You can set promotion if applicable (default is 'q' for queen)
-    };
-    result = game.move(moveObject);
-    if (result) {
-        // Move is legal, update the board
-        board.position(game.fen());
-    } else {
-        // Move is illegal, handle accordingly
-        console.error("Illegal move:", scnMove);
-    }
-/*     board.position(game.fen());
-    renderMoveHistory(game.history()); */
-    if (game.game_over()) {
-        alert('Game over');
-    }
-}
-
-function renderMoveHistory(moves) {
-    // Render the move history
-}
-
-function getBestMove(game) {
-    // Add your logic to get the best move
-    
-}
 
 var config = {
     draggable: true,
@@ -158,11 +178,8 @@ var config = {
 
 board = Chessboard('board1', config)
 
-$('#startBtn').on('click', startGame);
-$('#clearBtn').on('click', board.clear);
-$('#undoBtn').on('click', board.undo);
-//$('#moveBtn').on('click', makeBestMove);
-$('#randomToRandomBtn').on('click', makeRandomMove);
-$('#playerToRandomBtn').on('click', makeRandomMove);
+$('#stopBtn').on('click', stopGame);
+$('#randomToRandomBtn').on('click', randomToRandom);
+$('#playerToRandomBtn').on('click', playerToRandom);
 $('#pauseGameBtn').on('click', pauseGame);
 $('#resumeGameBtn').on('click', resumeGame);
