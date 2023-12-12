@@ -1,5 +1,4 @@
 var board = null
-//var game = new Chess()
 var isGamePaused = false;
 var isGameInProgress = false; 
 var randomMoveAllowed = true;
@@ -10,12 +9,10 @@ var playerToRandomMode = false;
 function stopGame() {
     // If the game is in progress, stop the game and reset the board
     if (isGameInProgress || isGamePaused) {
-        // Stop the game and retrieve the moves
-        var moves = game.history();
-        console.log('Moves:', moves);
         
         // Reset the board
         board.clear();
+
         // Set another board
         board = Chessboard('board1', config);
 
@@ -41,11 +38,13 @@ function randomToRandom() {
 
     // Start a new board
     board.start();
+
     // Set another board
     board = Chessboard('board1', config);
 
     // Start a new game with only random moves
     game = new Chess();
+
     isGameInProgress = true;
     isGamePaused = false;
     playerToRandomMode = false;
@@ -54,8 +53,6 @@ function randomToRandom() {
     randomMoveAllowed = true;
 
     // Start making random moves automatically
-    rtr = true;
-    console.log('elo');
     makeRandomMove();
 }
 
@@ -68,14 +65,17 @@ function playerToRandom() {
 
     // Start a new board
     board = Chessboard('board1', config);
-    config.draggable = true;
+    
 
     // Start a new game where a user has to drag and drop, and then random moves
     game = new Chess();
+
     isGameInProgress = true;
     isGamePaused = false;
     playerToRandomMode = true;
     randomMoveAllowed = true;
+
+    config.draggable = true;
 }
 
 
@@ -96,6 +96,7 @@ function makeRandomMove () {
 
             // game over
             if (game.game_over()) return
+
             if(!isGamePaused){
                 var randomIdx = Math.floor(Math.random() * possibleMoves.length)
                 game.move(possibleMoves[randomIdx])
@@ -132,14 +133,15 @@ function onSnapEnd () {
 }
 /*------------------pauseGame-----------------------------------*/
 function pauseGame() {
-    var winnerSpan = document.getElementById('winnerSpan');
-    winnerSpan.innerHTML = '';
+    isGamePaused = true;
 
     config.draggable = false;
 
-    isGamePaused = true;
     var moves = game.history();
-    console.log('Moves:', moves);
+
+    var winnerSpan = document.getElementById('winnerSpan');
+    winnerSpan.innerHTML = '';
+
     sendMovesToBackend(moves)
 }
 /*------------------resumeGame-----------------------------------*/
@@ -147,6 +149,11 @@ function pauseGame() {
 function resumeGame() {
     isGamePaused = false;
     config.draggable = true;
+
+    if (!playerToRandomMode){
+        makeRandomMove()
+    }
+
 }
 /*------------------sendMovesToBackend-----------------------------------*/
 function sendMovesToBackend(moves) {
