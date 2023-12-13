@@ -26,6 +26,8 @@ function stopGame() {
         var winnerSpan = document.getElementById('winnerSpan');
         winnerSpan.innerHTML = '';
 
+        $('#randomToRandomBtn').show();
+        $('#playerToRandomBtn').show();
         $('#pauseGameBtn').hide();
         $('#resumeGameBtn').hide();
         
@@ -57,6 +59,8 @@ function randomToRandom() {
 
     $('#pauseGameBtn').show();
     $('#resumeGameBtn').hide();
+    $('#playerToRandomBtn').hide();
+    $('#randomToRandomBtn').hide();
 
     // Start making random moves automatically
     makeRandomMove();
@@ -85,6 +89,8 @@ function playerToRandom() {
 
     $('#pauseGameBtn').show();
     $('#resumeGameBtn').hide();
+    $('#playerToRandomBtn').hide();
+    $('#randomToRandomBtn').hide();
 }
 
 
