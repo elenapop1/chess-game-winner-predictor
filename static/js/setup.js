@@ -25,6 +25,9 @@ function stopGame() {
 
         var winnerSpan = document.getElementById('winnerSpan');
         winnerSpan.innerHTML = '';
+
+        $('#pauseGameBtn').hide();
+        $('#resumeGameBtn').hide();
         
     }
 }
@@ -52,6 +55,9 @@ function randomToRandom() {
     // Allow only random moves
     randomMoveAllowed = true;
 
+    $('#pauseGameBtn').show();
+    $('#resumeGameBtn').hide();
+
     // Start making random moves automatically
     makeRandomMove();
 }
@@ -76,6 +82,9 @@ function playerToRandom() {
     randomMoveAllowed = true;
 
     config.draggable = true;
+
+    $('#pauseGameBtn').show();
+    $('#resumeGameBtn').hide();
 }
 
 
@@ -143,6 +152,9 @@ function pauseGame() {
     winnerSpan.innerHTML = '';
 
     sendMovesToBackend(moves)
+
+    $('#pauseGameBtn').hide();
+    $('#resumeGameBtn').show();
 }
 /*------------------resumeGame-----------------------------------*/
 // Function to resume the game
@@ -153,6 +165,9 @@ function resumeGame() {
     if (!playerToRandomMode){
         makeRandomMove()
     }
+
+    $('#pauseGameBtn').show();
+    $('#resumeGameBtn').hide();
 
 }
 /*------------------sendMovesToBackend-----------------------------------*/
@@ -176,7 +191,7 @@ function sendMovesToBackend(moves) {
 }
 
 var config = {
-    draggable: true,
+    draggable: false,
     position: 'start',
     onDragStart: onDragStart,
     onDrop: onDrop,
@@ -190,3 +205,6 @@ $('#randomToRandomBtn').on('click', randomToRandom);
 $('#playerToRandomBtn').on('click', playerToRandom);
 $('#pauseGameBtn').on('click', pauseGame);
 $('#resumeGameBtn').on('click', resumeGame);
+
+$('#pauseGameBtn').hide();
+$('#resumeGameBtn').hide();
