@@ -92,16 +92,54 @@ function playerToRandom() {
     $('#playerToRandomBtn').hide();
     $('#randomToRandomBtn').hide();
 }
+/*------------------playerToPlayer-----------------------------*/
+function playerToPlayer() {
+    // If the game is in progress, stop the game and reset the board
+    if (isGameInProgress) {
+        stopGame();
+    }
 
+    // Start a new board
+    board = Chessboard('board1', config);
+    
+
+    // Start a new game where a user has to drag and drop, and then random moves
+    game = new Chess();
+
+    isGameInProgress = true;
+    isGamePaused = false;
+    playerToRandomMode = true;
+    randomMoveAllowed = true;
+
+    config.draggable = true;
+
+    $('#pauseGameBtn').show();
+    $('#resumeGameBtn').hide();
+    $('#playerToRandomBtn').hide();
+    $('#randomToRandomBtn').hide();
+    $('#playerToPlayerBtn').hide();
+}
+
+function isPlayerTurn(piece) {
+    return (game.turn() === 'w' && piece.search(/^w/) !== -1) || (game.turn() === 'b' && piece.search(/^b/) !== -1);
+}
 
 /*------------------onDragStart-----------------------------*/
 function onDragStart (source, piece, position, orientation) {
 
     // do not pick up pieces if the game is over
-    if (game.game_over()) return false
+    //if (game.game_over()) return false
+    if (game.game_over() || (playerToRandomMode && !isPlayerTurn(piece))) {
+        return false;
+    }
 
     // only pick up pieces for White
-    if (piece.search(/^b/) !== -1) return false
+    //if (piece.search(/^b/) !== -1) return false
+
+    // only pick up pieces for White or Black (depending on the turn)
+    if (!isPlayerTurn(piece)) {
+        return false;
+    }
 }
 
 /*------------------makeRandomMove-----------------------------*/
@@ -110,14 +148,30 @@ function makeRandomMove () {
             var possibleMoves = game.moves()
 
             // game over
-            if (game.game_over()) return
+            if (game.game_over()) {
+                return
+            }
 
             if(!isGamePaused){
                 var randomIdx = Math.floor(Math.random() * possibleMoves.length)
                 game.move(possibleMoves[randomIdx])
                 board.position(game.fen())
+
+                if (game.in_checkmate()) {
+                    // Determine the winner
+                    var winner = game.turn() === 'w' ? 'White' : 'Black';
+
+                    // Display the checkmate message in the HTML
+                    var checkmateWinner = document.getElementById('checkmateWinner');
+                    checkmateWinner.innerText = winner;
+
+                    // Show the checkmate message container
+                    var checkmateMessage = document.getElementById('checkmateMessage');
+                    checkmateMessage.style.display = 'block';
+                    return
+                }
         
-                if (!playerToRandomMode){
+                if (randomMoveAllowed && !isGamePaused && !playerToRandomMode){
                     window.setTimeout(makeRandomMove, 500)
                 }
             }
@@ -136,8 +190,24 @@ function onDrop (source, target) {
     // illegal move
     if (move === null) return 'snapback'
 
-    // make random legal move for black
-    window.setTimeout(makeRandomMove, 500)
+    // Check for checkmate after the move
+    if (game.in_checkmate()) {
+        // Determine the winner
+        var winner = game.turn() === 'w' ? 'White' : 'Black';
+
+        // Display the checkmate message in the HTML
+        var checkmateWinner = document.getElementById('checkmateWinner');
+        checkmateWinner.innerText = winner;
+
+        // Show the checkmate message container
+        var checkmateMessage = document.getElementById('checkmateMessage');
+        checkmateMessage.style.display = 'block';
+
+        return
+    } else {
+        // make random legal move for black
+        window.setTimeout(makeRandomMove, 500);
+    }
 }
 
 /*------------------onSnapEnd-----------------------------------*/
@@ -178,6 +248,7 @@ function resumeGame() {
 }
 /*------------------sendMovesToBackend-----------------------------------*/
 function sendMovesToBackend(moves) {
+    console.log(moves);
 
     $.ajax({
         type: "POST",
@@ -186,8 +257,13 @@ function sendMovesToBackend(moves) {
         data: JSON.stringify({ moves: moves }),
         success: function(response) {
             // Update the UI with the prediction
+            //console.log(response);
             var winnerSpan = document.getElementById('winnerSpan');
             winnerSpan.innerText = response.prediction === 1 ? 'white' : 'black';
+            
+            console.log(response.probability);
+            //document.getElementById('probabilityDisplay').innerText = `Probability: ${response.probability}`;
+            //document.getElementById('probabilityMessage').style.display = 'block'; 
         },
         error: function(error) {
             console.error('Error:', error);
@@ -209,6 +285,7 @@ board = Chessboard('board1', config)
 $('#stopBtn').on('click', stopGame);
 $('#randomToRandomBtn').on('click', randomToRandom);
 $('#playerToRandomBtn').on('click', playerToRandom);
+$('#playerToPlayerBtn').on('click', playerToPlayer);
 $('#pauseGameBtn').on('click', pauseGame);
 $('#resumeGameBtn').on('click', resumeGame);
 

@@ -12,7 +12,8 @@ tokenizer = pickle.load(open("trained_models/tokenizer.pkl", "rb"))
 
 @flask_app.route('/', methods=['GET'])
 def chess_index(): 
-    return render_template('index.html')
+    #return render_template('index.html')
+    return render_template('new_index.html')
 
 
 
@@ -29,9 +30,10 @@ def predict():
     test_sequence = pad_sequences(sequences, maxlen=349)
 
     white_or_black_proba  = model.predict(test_sequence)
+    print(white_or_black_proba)
     predicted_winner = (white_or_black_proba >= 0.5).astype(int)
 
-    return jsonify({'prediction': int(predicted_winner[0])})
+    return jsonify({'prediction': int(predicted_winner[0]), 'probability':float(white_or_black_proba[0])})
     
 
 

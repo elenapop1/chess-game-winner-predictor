@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Chess Winner Predictor</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="../static/js/chessboard-1.0.0.js"></script>
+
+        <!-- Chess JS (slightly modified) -->
+        <script defer src="../static/js/chess.js"></script>
+        </script>
+
+        <!-- Custom JS -->
+        <script defer src="../static/js/chessAI.js"></script>
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="../static/css/main.css">
+        <link rel="stylesheet" href="../static/css/index.css">
+        <link rel="stylesheet" href="../static/css/chessboard-1.0.0.min.css">
+         <!-- Favicon link -->
+        <link rel="icon" href="../static/img/favicon.ico" type="image/x-icon">
+
+    </head>
+
+
+    <body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">                                       
+        <div class="form-group" style="display: none;">
+            <label for="search-depth">Search Depth (Black):</label>
+            <select id="search-depth">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group" style="display: none;">
+            <label for="search-depth-white">Search Depth (White):</label>
+            <select id="search-depth-white">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+
+        <div style="text-align: center;">
+                <div class="form-group" style="display: none;">
+                    <input type="checkbox" id="showHint" name="showHint" value="showHint">
+                    <label for="showHint">Show Suggested Move (White)</label>
+                </div>
+                <div id="myBoard" style="width: 400px"></div>
+                <button id="pauseGameBtn">Predict winner</button>
+
+        </div>
+
+        <div style="text-align: center; margin-left: 20px;">
+            <div id="winned" style="width: 400px; font-size: 18px;">
+                Most probable to win is: <strong id="winnerSpan"></strong>
+            </div>
+            <div class="">
+                <h2>Status</h2>
+                <p><span id="status">No check, checkmate, or draw.</span></p>
+            </div>
+            <div id="probabilityMessage" style="width: 400px; font-size: 18px; display: none;">
+                Probability: <strong id="probabilityDisplay"></strong>
+            </div>
+        </div>
+    </body>
+</html> 
