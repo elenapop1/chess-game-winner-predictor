@@ -28,7 +28,7 @@ To use this application, follow these steps:
 
 The game initiates upon loading the page. 
 
-The application employs a chess AI (adapted from here)(https://github.com/zeyu2001/chess-ai), responsible for controlling the movements of the black player, while users manage the moves for the white pieces.
+The application employs a chess AI [adapted from here](https://github.com/zeyu2001/chess-ai), responsible for controlling the movements of the black player, while users manage the moves for the white pieces.
 
     
 At any point during the game, you have the option to pause and make a prediction about the eventual winner of the session.
