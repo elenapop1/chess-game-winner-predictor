@@ -13,7 +13,7 @@ tokenizer = pickle.load(open("trained_models/tokenizer.pkl", "rb"))
 @flask_app.route('/', methods=['GET'])
 def chess_index(): 
     #return render_template('index.html')
-    return render_template('new_index.html')
+    return render_template('index.html')
 
 
 

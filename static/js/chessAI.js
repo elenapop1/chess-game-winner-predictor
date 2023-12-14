@@ -692,15 +692,12 @@ function sendMovesToBackend(moves) {
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify({ moves: moves }),
         success: function(response) {
-            // Update the UI with the prediction
-            //console.log(response);
+
             var winnerSpan = document.getElementById('winnerSpan');
             winnerSpan.innerText = response.prediction === 1 ? 'white' : 'black';
             
             console.log(response.probability);
-            //document.getElementById('probabilityDisplay').innerText = `Probability: ${response.probability}`;
-            //document.getElementById('probabilityMessage').style.display = 'block'; 
-        },
+       },
         error: function(error) {
             console.error('Error:', error);
         }
