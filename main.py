@@ -2,12 +2,13 @@ import pickle
 import numpy as np
 import requests
 from flask import Flask, render_template, request, jsonify
-from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
 
 
 flask_app = Flask(__name__, template_folder='templates')
-model = pickle.load(open("trained_models/model_with_draw.pkl", "rb"))
+#model = pickle.load(open("trained_models/model_with_draw.pkl", "rb"))
+model = load_model("trained_models/model_with_draw.h5")
 tokenizer = pickle.load(open("trained_models/tokenizer_with_draw.pkl", "rb"))
 
 @flask_app.route('/', methods=['GET'])

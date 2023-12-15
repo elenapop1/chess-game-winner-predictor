@@ -677,14 +677,14 @@ function pauseGame() {
 
     var moves = game.history();
 
-    console.log(moves);
+    //console.log(moves);
 
     sendMovesToBackend(moves)
 }
 
 /*------------------sendMovesToBackend-----------------------------------*/
 function sendMovesToBackend(moves) {
-    console.log(moves);
+    //console.log(moves);
 
     $.ajax({
         type: "POST",
