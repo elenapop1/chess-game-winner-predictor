@@ -7,8 +7,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 flask_app = Flask(__name__, template_folder='templates')
-model = pickle.load(open("trained_models/model.pkl", "rb"))
-tokenizer = pickle.load(open("trained_models/tokenizer.pkl", "rb"))
+model = pickle.load(open("trained_models/model_with_draw.pkl", "rb"))
+tokenizer = pickle.load(open("trained_models/tokenizer_with_draw.pkl", "rb"))
 
 @flask_app.route('/', methods=['GET'])
 def chess_index(): 
@@ -29,11 +29,13 @@ def predict():
     sequences = tokenizer.texts_to_sequences([myseq])
     test_sequence = pad_sequences(sequences, maxlen=349)
 
-    white_or_black_proba  = model.predict(test_sequence)
-    print(white_or_black_proba)
-    predicted_winner = (white_or_black_proba >= 0.5).astype(int)
+    white_black_draw_proba = model.predict(test_sequence)
 
-    return jsonify({'prediction': int(predicted_winner[0]), 'probability':float(white_or_black_proba[0])})
+    black = float(white_black_draw_proba[0][0])
+    white = float(white_black_draw_proba[0][1])
+    draw = float(white_black_draw_proba[0][2])
+
+    return jsonify({'black': black, 'white':white, 'draw':draw})
     
 
 

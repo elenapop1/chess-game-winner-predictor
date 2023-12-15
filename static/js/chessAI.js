@@ -693,10 +693,15 @@ function sendMovesToBackend(moves) {
         data: JSON.stringify({ moves: moves }),
         success: function(response) {
 
-            var winnerSpan = document.getElementById('winnerSpan');
-            winnerSpan.innerText = response.prediction === 1 ? 'white' : 'black';
+            var winnerSpanB = document.getElementById('winnerSpanB');
+            winnerSpanB.innerText = response.black.toFixed(2);
+
+            var winnerSpanW = document.getElementById('winnerSpanW');
+            winnerSpanW.innerText = response.white.toFixed(2);
+
+            var winnerSpanD = document.getElementById('winnerSpanD');
+            winnerSpanD.innerText = response.draw.toFixed(2);
             
-            console.log(response.probability);
        },
         error: function(error) {
             console.error('Error:', error);
